@@ -1,21 +1,10 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import Example from './components/RateChart'
+import HistoricalDataChart from './components/HistoricalDataChart'
+import useHistoricalData from './hooks/useHistoricalData'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-
-  const fetchRates = async () => {
-    const rates = await fetch("https://openexchangerates.org/api/historical/2023-01-01.json?app_id=9637dd16bfce47dfa554678e6cec6c47&symbols=ILS")
-    console.log(await rates.json())
-
-  } 
-  useEffect(() => {
-    fetchRates()
-  }, [])
+  const { data, loading, error, setDateRange  } = useHistoricalData()
 
   return (
     <>
@@ -26,7 +15,7 @@ function App() {
           <div className='date-input'>end</div>
         </div>
         <div className='chart'>
-          <Example/>
+          <HistoricalDataChart data={data}/>
         </div>
       </div>
     </>
