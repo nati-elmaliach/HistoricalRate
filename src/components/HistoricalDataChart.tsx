@@ -26,7 +26,7 @@ const HistoricalDataChart: React.FC<HistoricalDataChartProps> = ({ data }) => {
         <Tooltip />
         <Legend />
         <Bar dataKey="value" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-        {/* <Bar dataKey="uv" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} /> */}
+        <Bar dataKey="changeInPrecentage" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
       </BarChart>
     </ResponsiveContainer>
     )

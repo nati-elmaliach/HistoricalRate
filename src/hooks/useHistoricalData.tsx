@@ -2,25 +2,26 @@ import { useCallback, useEffect, useState } from "react"
 import { DataPoint } from "../types/DatePoint"
 
 
+// TODO think about DRY
 const generateDefaultDays = () => {
     const date = new Date()
-    const startDate = date.toISOString().split('T')[0]
+    const endDate = date.toISOString().split('T')[0]
 
     date.setDate(date.getDate() - 13)
 
-    const endDate = date.toISOString().split('T')[0]
+    const startDate = date.toISOString().split('T')[0]
 
     return { startDate, endDate}
 }
 
 const generateDateRange = (startDate: string, endDate: string) => {
     const dates = [];
-    const currentDate = new Date(startDate);
     const end = new Date(endDate);
+    const start = new Date(startDate);
     
-    while (currentDate >= end) {
-      dates.push(end.toISOString().split('T')[0]);
-      end.setDate(end.getDate() + 1);
+    while (start <= end) {
+      dates.push(start.toISOString().split('T')[0]);
+      start.setDate(start.getDate() + 1);
     }
 
     return dates;
@@ -67,8 +68,14 @@ const useHistoricalData = (rateSymbol: string = 'ILS') => {
         }
         })
       );
-
-      setData(results);
+      const resultsToDisplay = results.map((dataPoint, index) => {
+        if (index == 0) return dataPoint;
+        const oldValue = results[index -1].value;
+        const changeInPrecentage = ((dataPoint.value - oldValue) / oldValue) * 100;
+        return  { ...dataPoint, changeInPrecentage  };
+      })
+      setData(resultsToDisplay);
+      console.log(resultsToDisplay)
     } catch (err) {
       setError("Could not fetch historical data");
       console.error('Error fetching historical data:', err);
